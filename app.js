@@ -2,6 +2,7 @@
 var width  = 300,
     height = 300,
     radius = 30,
+    charge = -60000,
     colors = d3.scale.category10();
 
 var svg = d3.select('body')
@@ -22,7 +23,7 @@ var lastNodeId = 2;
 var force = d3.layout.force()
     .nodes(nodes)
     .size([width, height])
-    .charge(-20000)
+    .charge(charge)
     .gravity(0.5)
     .on('tick', tick)
 
@@ -123,10 +124,11 @@ function mousedown() {
   // insert new node at point
   var point = d3.mouse(this),
       node = {id: ++lastNodeId};
-  node.x = width/2;
-  node.y = height/2;
+  node.x = (width + Math.random()*100)/2;
+  node.y = (height + Math.random()*100)/2;
   nodes.push(node);
 
+  force.charge(charge/nodes.length);
   restart();
 }
 
