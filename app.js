@@ -155,6 +155,7 @@ function keydown() {
     case 46: // delete
       nodes.splice(nodes.indexOf(selected_node), 1);
       selected_node = null;
+      force.charge(charge/nodes.length);      
       restart();
       break;
   }
