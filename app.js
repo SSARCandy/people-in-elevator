@@ -1,8 +1,10 @@
 // set up SVG for D3
 var width  = 300,
     height = 300,
-    radius = 30,
-    charge = -60000,
+    radius = 35,
+    charge = -40000,
+    gravity = 0.5,
+    gravityStep = 0.03,
     colors = d3.scale.category10();
 
 var svg = d3.select('body')
@@ -24,7 +26,7 @@ var force = d3.layout.force()
     .nodes(nodes)
     .size([width, height])
     .charge(charge)
-    .gravity(0.5)
+    .gravity(gravity)
     .on('tick', tick)
 
 
@@ -119,7 +121,11 @@ function restart() {
 }
 
 function mousedown() {
-  if(d3.event.ctrlKey || mousedown_node) return;
+  if (d3.event.ctrlKey || mousedown_node) return;
+  if (lastNodeId > 14) {
+      alert('Too many people in elevator, it is dangerous!');
+      return;
+  }
 
   // insert new node at point
   var point = d3.mouse(this),
@@ -128,7 +134,9 @@ function mousedown() {
   node.y = (height + Math.random()*100)/2;
   nodes.push(node);
 
-  force.charge(charge/nodes.length);
+  force
+    .gravity(gravity + gravityStep*node.length)
+    .charge(charge/(nodes.length*nodes.length));
   restart();
 }
 
@@ -155,7 +163,11 @@ function keydown() {
     case 46: // delete
       nodes.splice(nodes.indexOf(selected_node), 1);
       selected_node = null;
-      force.charge(charge/nodes.length);      
+
+      force
+        .gravity(gravity + gravityStep*node.length)
+        .charge(charge/(nodes.length*nodes.length));
+
       restart();
       break;
   }
