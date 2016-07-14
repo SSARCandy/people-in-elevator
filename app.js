@@ -123,8 +123,8 @@ function mousedown() {
   // insert new node at point
   var point = d3.mouse(this),
       node = {id: ++lastNodeId};
-  node.x = point[0];
-  node.y = point[1];
+  node.x = width/2;
+  node.y = height/2;
   nodes.push(node);
 
   restart();
