@@ -122,7 +122,7 @@ function restart() {
 
 function mousedown() {
   if (d3.event.ctrlKey || mousedown_node) return;
-  if (lastNodeId > 14) {
+  if (nodes.length > 14) {
       alert('Too many people in elevator, it is dangerous!');
       return;
   }
